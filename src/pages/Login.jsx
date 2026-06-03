@@ -6,18 +6,26 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const res = await api.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
-      navigate("/");
+
+      // small delay helps mobile feel responsive
+      setTimeout(() => {
+        navigate("/");
+      }, 100);
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,7 +40,10 @@ function Login() {
                 <h1 className="brand-title" style={{ color: "white" }}>
                   Task Manager
                 </h1>
-                <p className="brand-subtitle" style={{ color: "rgba(255,255,255,0.85)" }}>
+                <p
+                  className="brand-subtitle"
+                  style={{ color: "rgba(255,255,255,0.85)" }}
+                >
                   Plan your work, track progress, finish faster
                 </p>
               </div>
@@ -98,8 +109,8 @@ function Login() {
                 />
               </div>
 
-              <button className="primary-btn" type="submit">
-                Login
+              <button className="primary-btn" type="submit" disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
               </button>
             </form>
 
