@@ -167,7 +167,7 @@ function Dashboard() {
         )}
 
         <footer className="footer">
-          Task Manager App • Built with React, Node.js, and MongoDB
+          Task Manager
         </footer>
       </div>
     </div>
