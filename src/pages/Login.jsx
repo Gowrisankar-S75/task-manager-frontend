@@ -9,25 +9,32 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    try {
-      const res = await api.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
+  try {
+    const res = await api.post("/auth/login", {
+      email,
+      password,
+    });
 
-      // small delay helps mobile feel responsive
-      setTimeout(() => {
-        navigate("/");
-      }, 100);
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+    console.log("LOGIN RESPONSE:", res.data);
+
+    localStorage.setItem("token", res.data.token);
+
+    console.log(
+      "TOKEN AFTER SAVE:",
+      localStorage.getItem("token")
+    );
+
+    navigate("/");
+  } catch (err) {
+    console.log(err);
+    setError(err.response?.data?.message || "Login failed");
+  }
+};
+
 
   return (
     <div className="auth-shell">
